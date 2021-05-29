@@ -14,7 +14,7 @@ import java.util.Date;
 public class Corrida {
     
     private Integer id;
-    private String nomeCorrida;
+    private String nome;
     private Date data;
     private String hora;
     private String circuito;
@@ -31,7 +31,7 @@ public Corrida(int id, String nomeCorrida,Date data, String hora, String circuit
 				) {
 			super();
 			this.id = id;
-			this.nomeCorrida = nomeCorrida;
+			this.nome = nomeCorrida;
 			this.data = data;
 			this.hora = hora;
 			this.circuito = circuito;
@@ -58,17 +58,17 @@ public Corrida(int id, String nomeCorrida,Date data, String hora, String circuit
     }
 
     /**
-     * @return the nomeCorrida
+     * @return the nome
      */
-    public String getNomeCorrida() {
-        return nomeCorrida;
+    public String getNome() {
+        return nome;
     }
 
     /**
-     * @param nomeCorrida the nomeCorrida to set
+     * @param nome the nome to set
      */
-    public void setNomeCorrida(String nomeCorrida) {
-        this.nomeCorrida = nomeCorrida;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     /**
@@ -116,4 +116,5 @@ public Corrida(int id, String nomeCorrida,Date data, String hora, String circuit
     /**
      * @return the piloto
      */
+    
 }

@@ -40,7 +40,7 @@ import model.*;
 @WebServlet(urlPatterns = {"/Controller", "/mainPiloto", "/insertPiloto", "/selectPiloto", "/updatePiloto", "/deletePiloto", "/reportPiloto",
     "/mainVeiculo", "/insertVeiculo", "/selectVeiculo", "/updateVeiculo", "/deleteVeiculo", "/reportVeiculo",
     "/mainCorrida", "/insertCorrida", "/selectCorrida", "/updateCorrida", "/deleteCorrida", "/reportCorrida",
-    "/insertParticipante"})
+    "/mainParticipante","/insertParticipante","/updateParticipante"})
 public class Controller extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
@@ -53,7 +53,7 @@ public class Controller extends HttpServlet {
     Corrida cadastrocorrida = new Corrida();
     dal.DaoCorrida dc = new DaoCorrida();
 
-    Participante part = new Participante();
+    Participante cadastroparticipante = new Participante();
     dal.DaoParticipante daoparticipante = new DaoParticipante();
 
     public Controller() {
@@ -78,9 +78,11 @@ public class Controller extends HttpServlet {
             case "/mainCorrida":
                 cadastrosCorrida(request, response);
                 break;
-                 case "/mainParticipante":
-                cadastrosCorrida(request, response);
+
+            case "/mainParticipante":
+                cadastrosParticipante(request, response);
                 break;
+
             case "/insertPiloto":
                 novoCadastroPiloto(request, response);
                 break;
@@ -102,6 +104,9 @@ public class Controller extends HttpServlet {
             case "/selectCorrida":
                 listarCadastroCorrida(request, response);
                 break;
+            case "/selectParticipante":
+                listarCadastroParticipante(request, response);
+                break;
             case "/updatePiloto":
                 editarCadastroPiloto(request, response);
                 break;
@@ -110,6 +115,9 @@ public class Controller extends HttpServlet {
                 break;
             case "/updateCorrida":
                 editarCadastroCorrida(request, response);
+                break;
+                case "/updateParticipante":
+                editarCadastroParticipante(request, response);
                 break;
             case "/deletePiloto":
                 removerCadastroPiloto(request, response);
@@ -148,10 +156,9 @@ public class Controller extends HttpServlet {
         // System.out.println(lista.get(i).getEmail());
 
         request.setAttribute("cadastrosPiloto", lista);
-       // RequestDispatcher rd = request.getRequestDispatcher("cadastroPiloto.jsp");
-       RequestDispatcher  rd = request.getRequestDispatcher("addParticipante.jsp");
-      
-        
+        RequestDispatcher rd = request.getRequestDispatcher("cadastroPiloto.jsp");
+        // RequestDispatcher  rd = request.getRequestDispatcher("addParticipante.jsp");
+
         rd.forward(request, response);
     }
 
@@ -518,7 +525,7 @@ public class Controller extends HttpServlet {
 
     protected void novoCadastroCorrida(HttpServletRequest request, HttpServletResponse response) {
 
-        cadastrocorrida.setNomeCorrida(request.getParameter("nomecorrida"));
+        cadastrocorrida.setNome(request.getParameter("nomecorrida"));
 
         try {
             // System.out.println(request.getParameter("nome"));
@@ -558,7 +565,7 @@ public class Controller extends HttpServlet {
         //cadastroPiloto.setMatricula(Integer.parseInt(matricula));
         // executar o metodo selecionar contato classe dao
         dc.selecionarCadastro(cadastrocorrida);
-        System.out.println(cadastrocorrida.getNomeCorrida());
+        System.out.println(cadastrocorrida.getNome());
         // teste de recebimento
         /*System.out.println(cadastroVeiculo.getRenavam());
         System.out.println(cadastroVeiculo.getMarca());
@@ -572,7 +579,7 @@ public class Controller extends HttpServlet {
          */
         // seytar os atributor do formulario com Piloto
         request.setAttribute("id", cadastrocorrida.getId());
-        request.setAttribute("nomecorrida", cadastrocorrida.getNomeCorrida());
+        request.setAttribute("nomecorrida", cadastrocorrida.getNome());
         request.setAttribute("data", cadastrocorrida.getData());
         request.setAttribute("hora", cadastrocorrida.getHora());
         request.setAttribute("circuito", cadastrocorrida.getCircuito());
@@ -589,7 +596,7 @@ public class Controller extends HttpServlet {
 
         // setar as variaveis Piloto
         cadastrocorrida.setId(Integer.parseInt(request.getParameter("id")));
-        cadastrocorrida.setNomeCorrida(request.getParameter("nomecorrida"));
+        cadastrocorrida.setNome(request.getParameter("nomecorrida"));
         try {
             cadastrocorrida.setData(new SimpleDateFormat("yyyy-MM-dd").parse(request.getParameter("data")));
         } catch (ParseException ex) {
@@ -605,6 +612,26 @@ public class Controller extends HttpServlet {
         } catch (IOException ex) {
             Logger.getLogger(Controller.class.getName()).log(Level.SEVERE, null, ex);
         }
+
+    }
+
+    protected void cadastrosParticipante(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        // response.sendRedirect("cadastro.jsp");
+        // criando objeto que ira receber os dados Piloto
+
+        ArrayList<Participante> lista = (ArrayList<Participante>) daoparticipante.ConsultarTodos();
+        // for (int i = 0; i < lista.size(); i++) {
+        // System.out.println(lista.get(i).getIdcon());
+        // System.out.println(lista.get(i).getNome());
+        // System.out.println(lista.get(i).getFone());
+        // System.out.println(lista.get(i).getEmail());
+
+        request.setAttribute("cadastrosParticipante", lista);
+        RequestDispatcher rd = request.getRequestDispatcher("addParticipante.jsp");
+        // RequestDispatcher  rd = request.getRequestDispatcher("addParticipante.jsp");
+
+        rd.forward(request, response);
 
     }
 
@@ -624,18 +651,109 @@ public class Controller extends HttpServlet {
         response.sendRedirect("mainCorrida");
     }
 
-    
-     protected void  novoParticipante(HttpServletRequest request, HttpServletResponse response)
+    protected void novoParticipante(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String valorPiloto = request.getParameter("comboPiloto");
+        String valorVeiculo = request.getParameter("comboVeiculo");
+        String valorCorrida = request.getParameter("id");
 
-         
-      request.setAttribute("codpiloto", part.getPiloto().getNome());
+
+        DaoPiloto dp = new DaoPiloto();
+        DaoVeiculo dv = new DaoVeiculo();
+        DaoCorrida dc = new DaoCorrida();
+        DaoParticipante dpart = new DaoParticipante();
+
+        Participante part = new Participante();
+        part.setPiloto(dp.ConsultarCadastro(Integer.parseInt(valorPiloto)));
+        part.setVeiculo(dv.ConsultarCadastro(Integer.parseInt(valorVeiculo)));
+        part.setCorrida(dc.ConsultarCadastro(Integer.parseInt(valorCorrida)));
+
+
+        /*request.setAttribute("codpiloto", part.getPiloto().getNome());
         request.setAttribute("cadveiculo", part.getVeiculo().getRenavam());
+
         request.setAttribute("cadcorrida", part.getCorrida().getId());
-       
+
+         */
+        // cadastroPiloto.setNome(request.getParameter("nome"));
+        dpart.Inserir(part);
+        System.out.println(valorPiloto);
+
         // encaminhar ao documento editar.jsp
-        RequestDispatcher rd = request.getRequestDispatcher("addParticipante.jsp");
+        //RequestDispatcher rd = request.getRequestDispatcher("addParticipante.jsp");
+        //rd.forward(request, response);
+        response.sendRedirect("Gp.jsp?id="+ valorCorrida);
+
+    }
+
+    protected void listarCadastroParticipante(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        // recebimento do id do contato que sera editado
+        String id = request.getParameter("id");
+        System.out.println("id");
+        // setor a variavel java beans
+
+        cadastroparticipante.setId(Integer.parseInt(id));
+        // executar o metodo selecionar contato classe dao
+        daoparticipante.selecionarCadastro(cadastroparticipante);
+
+        // teste de recebimento
+        // seytar os atributor do formulario com Piloto
+        request.setAttribute("id", cadastroparticipante.getId());
+        request.setAttribute("codpiloto", cadastroparticipante.getPiloto());
+        request.setAttribute("cadveiculo", cadastroparticipante.getVeiculo());
+        request.setAttribute("cadcorrida", cadastroparticipante.getCorrida());
+
+        // encaminhar ao documento editar.jsp
+        RequestDispatcher rd = request.getRequestDispatcher("editarParticipante.jsp");
         rd.forward(request, response);
-    
+    }
+/*
+protected void cadastrosParticipante(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        // response.sendRedirect("cadastro.jsp");
+        // criando objeto que ira receber os dados Piloto
+
+        ArrayList<Participante> lista =  daoparticipante.selecionarCadastro(Participante p);
+        // for (int i = 0; i < lista.size(); i++) {
+        // System.out.println(lista.get(i).getIdcon());
+        // System.out.println(lista.get(i).getNome());
+        // System.out.println(lista.get(i).getFone());
+        // System.out.println(lista.get(i).getEmail());
+
+        request.setAttribute("cadastrosParticipante", lista);
+        RequestDispatcher rd = request.getRequestDispatcher("cadastroParticipante.jsp");
+        // RequestDispatcher  rd = request.getRequestDispatcher("addParticipante.jsp");
+
+        rd.forward(request, response);
+
+*/
+
+    protected void editarCadastroParticipante(HttpServletRequest request, HttpServletResponse response) 
+        throws ServletException, IOException {
+         String valorPiloto = request.getParameter("comboPiloto");
+        String valorVeiculo = request.getParameter("comboVeiculo");
+        String valorCorrida = request.getParameter("id");
+
+
+        DaoPiloto dp = new DaoPiloto();
+        DaoVeiculo dv = new DaoVeiculo();
+        DaoCorrida dc = new DaoCorrida();
+        DaoParticipante dpart = new DaoParticipante();
+
+        Participante part = new Participante();
+        part.setPiloto(dp.ConsultarCadastro(Integer.parseInt(valorPiloto)));
+        part.setVeiculo(dv.ConsultarCadastro(Integer.parseInt(valorVeiculo)));
+        part.setCorrida(dc.ConsultarCadastro(Integer.parseInt(valorCorrida)));
+
+       
+        dpart.Alterar(part);
+        System.out.println(valorPiloto);
+
+        // encaminhar ao documento editar.jsp
+        //RequestDispatcher rd = request.getRequestDispatcher("addParticipante.jsp");
+        //rd.forward(request, response);
+        response.sendRedirect("Gp.jsp?id="+ valorCorrida);
+    }
 }
-}
+

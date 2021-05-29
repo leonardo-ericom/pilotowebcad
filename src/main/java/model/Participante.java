@@ -5,18 +5,32 @@
  */
 package model;
 
+import java.util.Date;
+
 /**
  *
  * @author leonardo
  */
 public class Participante {
-    
+
     private Integer id;
     private Piloto piloto;
     private Veiculo veiculo;
     private Corrida corrida;
 
-   
+    public Participante() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
+
+    public Participante(int id, Piloto piloto, Veiculo veiculo, Corrida corrida) {
+        super();
+        this.id = id;
+        this.piloto = piloto;
+        this.veiculo = veiculo;
+        this.corrida = corrida;
+
+    }
 
     public Integer getId() {
         return id;
@@ -43,13 +57,10 @@ public class Participante {
     }
 
     public Corrida getCorrida() {
-        return corrida;
+        return this.corrida;
     }
 
     public void setCorrida(Corrida corrida) {
         this.corrida = corrida;
     }
-
-
-
 }

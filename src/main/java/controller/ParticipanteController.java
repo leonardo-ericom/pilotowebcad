@@ -5,12 +5,15 @@
  */
 package controller;
 
+import dal.*;
 import java.io.IOException;
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import model.Participante;
 
 /**
  *
@@ -32,6 +35,41 @@ public class ParticipanteController extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         
+        novoParticipante(request, response);
+
+    }
+
+    protected void novoParticipante(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        String valorPiloto = request.getParameter("comboPiloto");
+        String valorVeiculo = request.getParameter("comboVeiculo");
+        String valorCorrida = request.getParameter("comboCorrida");
+        
+        DaoPiloto dp = new DaoPiloto();
+        DaoVeiculo dv = new DaoVeiculo();
+        DaoCorrida dc = new DaoCorrida();
+        DaoParticipante dpart = new DaoParticipante();
+        
+        Participante part = new Participante();
+        part.setPiloto(dp.ConsultarCadastro(Integer.parseInt(valorPiloto)));
+        part.setVeiculo(dv.ConsultarCadastro(Integer.parseInt(valorVeiculo)));
+        part.setCorrida(dc.ConsultarCadastro(Integer.parseInt(valorCorrida)));
+        
+        /*request.setAttribute("codpiloto", part.getPiloto().getNome());
+        request.setAttribute("cadveiculo", part.getVeiculo().getRenavam());
+
+        request.setAttribute("cadcorrida", part.getCorrida().getId());
+
+         */
+        // cadastroPiloto.setNome(request.getParameter("nome"));
+        dpart.Inserir(part);
+        System.out.println(valorPiloto);
+
+        // encaminhar ao documento editar.jsp
+        RequestDispatcher rd = request.getRequestDispatcher("addParticipante.jsp");
+        rd.forward(request, response);
+
+       response.sendRedirect("cadastro.jsp");
     }
 
     /**
@@ -45,7 +83,7 @@ public class ParticipanteController extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        
+
     }
 
     /**

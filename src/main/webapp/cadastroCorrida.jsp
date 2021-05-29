@@ -37,7 +37,7 @@
         <a href="reportCorrida" class="Botao3">Relatório</a>
     
 
-        <table id="tabela" >
+        <table id="tabela" />
 
 
             <thead>
@@ -60,7 +60,7 @@
 
 
                 <td><%=lista.get(i).getId()%></td>
-                <td><%=lista.get(i).getNomeCorrida()%></td>
+                <td><%=lista.get(i).getNome()%></td>
                 <td><%=lista.get(i).getData()%></td>
                 <td><%=lista.get(i).getHora()%></td>
                 <td><%=lista.get(i).getCircuito()%></td>
@@ -70,7 +70,7 @@
 
                 <td><a href= "selectCorrida?id=<%=lista.get(i).getId()%>" class="Botao1">Editar Corrida</a>
                     
-                    <a href= "Gp.jsp" class="Botao1">Adicionar Participante</a>
+                    <a href= "Gp.jsp?id=<%=lista.get(i).getId()%>" class="Botao1">Adicionar Participante</a>
                 <a href="javascript:confirmar(<%=lista.get(i).getId()%>)" 
                        class= "Botao2">Excluir</a>
                 

@@ -18,7 +18,7 @@
             <table>
                 <tr>
                     <td><input type="text" name= "nomecorrida" placeholder="Nome da Corrida" class="Caixa1"></td>
-                <tr>
+                </tr>
                 <tr>
                     <td><input type="date" name= "data" placeholder="data" class="Caixa1" ></td>
                 </tr>
@@ -26,6 +26,7 @@
                     <td><input type="text" name= "hora" placeholder="Hora" class="Caixa1"></td>
                 </tr>
 
+                <tr>
                 <td><input type="text" name= "circuito" placeholder="Circuito" class="Caixa1"></td>
                 </tr>
 

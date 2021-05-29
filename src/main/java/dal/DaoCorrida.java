@@ -35,7 +35,7 @@ public class DaoCorrida {
             PreparedStatement pst = con.prepareStatement(create);
 
             // substituir os parametros pelo conteudo das variaveis javabeans
-            pst.setString(1, corrida.getNomeCorrida());
+            pst.setString(1, corrida.getNome());
             pst.setDate(2, new java.sql.Date(corrida.getData().getTime()));
             pst.setString(3, corrida.getHora());
             pst.setString(4, corrida.getCircuito());
@@ -109,7 +109,7 @@ public class DaoCorrida {
             while (rs.next()) {
                 //setar as variaveis da entidade piloto
                 cc.setId(rs.getInt(1));
-                cc.setNomeCorrida(rs.getString(2));
+                cc.setNome(rs.getString(2));
                 cc.setData(rs.getDate(3));
                 cc.setHora(rs.getString(4));
                 cc.setCircuito(rs.getString(5));
@@ -139,7 +139,7 @@ public class DaoCorrida {
                 //setar as variaveis da entidade piloto
 
                 co.setId(rs.getInt(1));
-                co.setNomeCorrida(rs.getString(2));
+                co.setNome(rs.getString(2));
                 co.setData(rs.getDate(3));
                 co.setHora(rs.getString(4));
                 co.setCircuito(rs.getString(5));
@@ -164,7 +164,7 @@ public class DaoCorrida {
             Connection con = conectar();
             PreparedStatement pst = con.prepareStatement(create);
 
-            pst.setString(1, cadastro.getNomeCorrida());
+            pst.setString(1, cadastro.getNome());
             pst.setDate(2, new java.sql.Date(cadastro.getData().getTime()));
             pst.setString(3, cadastro.getHora());
             pst.setString(4, cadastro.getCircuito());
